@@ -1,5 +1,5 @@
 package dao;
-import models.Product;
+import model.Product;
 import database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -34,6 +34,29 @@ public class productDAO {
         }
 
         return list;
+    }
+
+    public void addProduct(Product product) {
+        String query = "INSERT INTO products (id, name, quantity, price) VALUES (?, ?, ?, ?)";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setString(1, product.getId());
+            ps.setString(2, product.getName());
+            ps.setInt(3, product.getQuantity());
+            ps.setDouble(4, product.getPrice());
+
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Product saved to database.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     public void updateProduct(Product product) {
